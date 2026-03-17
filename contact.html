@@ -167,8 +167,51 @@
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase-config.js"></script>
   <script src="js/main.js"></script>
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const supabaseClient = createClient(
+      'https://bbrvjanvocpyhblvqqxm.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJicnZqYW52b2NweWhibHZxcXhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3Mjg0MzUsImV4cCI6MjA4OTMwNDQzNX0.sIyfUfvw89G0LH4I_ZFt6XIoeGJXs9-5fo6Bthv_Bg8'
+    );
+
+    const form = document.querySelector('.contact-form');
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('.form-submit');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = 'Sending...';
+
+        try {
+          const { error } = await supabaseClient.from('contacts').insert([{
+            first_name: document.getElementById('firstName').value.trim(),
+            last_name: document.getElementById('lastName').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            subject: document.getElementById('subject').value,
+            message: document.getElementById('message').value.trim(),
+          }]);
+
+          if (error) throw error;
+
+          btn.innerHTML = '&#10003; Sent Successfully!';
+          btn.style.background = 'linear-gradient(135deg, #6bcb77, #00cec9)';
+          form.reset();
+        } catch (err) {
+          console.error('Submit error:', err);
+          btn.innerHTML = '&#10007; Failed - ' + (err.message || 'Try again');
+          btn.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a24)';
+        }
+
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.style.background = '';
+          btn.disabled = false;
+        }, 3000);
+      });
+    }
+  </script>
 </body>
 </html>
