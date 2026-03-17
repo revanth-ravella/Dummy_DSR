@@ -70,20 +70,60 @@ if (counterSection) {
   counterObserver.observe(counterSection);
 }
 
-// ===== Contact Form Handler =====
+// ===== Contact Form Handler (Supabase) =====
 const contactForm = document.querySelector('.contact-form');
 if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
+  contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = contactForm.querySelector('.form-submit');
-    const originalText = btn.textContent;
-    btn.textContent = 'Sent Successfully!';
-    btn.style.background = 'linear-gradient(135deg, #6bcb77, #00cec9)';
-    setTimeout(() => {
-      btn.textContent = originalText;
-      btn.style.background = '';
+    const originalText = btn.innerHTML;
+
+    // Disable button while submitting
+    btn.disabled = true;
+    btn.innerHTML = 'Sending...';
+
+    const formData = {
+      first_name: document.getElementById('firstName').value.trim(),
+      last_name: document.getElementById('lastName').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      subject: document.getElementById('subject').value,
+      message: document.getElementById('message').value.trim(),
+    };
+
+    try {
+      // Check if Supabase is loaded
+      if (typeof supabase === 'undefined') {
+        throw new Error('Supabase not configured');
+      }
+
+      const { error } = await supabase
+        .from('contacts')
+        .insert([formData]);
+
+      if (error) throw error;
+
+      // Success
+      btn.innerHTML = '&#10003; Sent Successfully!';
+      btn.style.background = 'linear-gradient(135deg, #6bcb77, #00cec9)';
       contactForm.reset();
-    }, 3000);
+
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.style.background = '';
+        btn.disabled = false;
+      }, 3000);
+
+    } catch (err) {
+      console.error('Submission error:', err);
+      btn.innerHTML = '&#10007; Failed to send';
+      btn.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a24)';
+
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.style.background = '';
+        btn.disabled = false;
+      }, 3000);
+    }
   });
 }
 
