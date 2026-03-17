@@ -18,8 +18,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li><a href="login.html" class="active">Login</a></li>
-        <li><a href="payment.html" class="btn btn-primary nav-cta">Pay Now</a></li>
+        <li><a href="login.html" class="btn btn-primary nav-cta active">Login</a></li>
       </ul>
       <button class="hamburger" aria-label="Toggle menu">
         <span></span><span></span><span></span>
@@ -177,16 +176,21 @@
         // Store login state
         sessionStorage.setItem('nexus_user', JSON.stringify({ email: email, name: email.split('@')[0] }));
         setTimeout(() => {
-          window.location.href = 'payment.html';
+          window.location.href = 'dashboard.html';
         }, 800);
       }, 1500);
     });
+
+    // Redirect if already logged in
+    if (sessionStorage.getItem('nexus_user')) {
+      window.location.href = 'dashboard.html';
+    }
 
     // Social login handler
     function socialLogin(provider) {
       const user = { email: provider + '@nexus.dev', name: provider.charAt(0).toUpperCase() + provider.slice(1) + ' User' };
       sessionStorage.setItem('nexus_user', JSON.stringify(user));
-      window.location.href = 'payment.html';
+      window.location.href = 'dashboard.html';
     }
   </script>
 </body>

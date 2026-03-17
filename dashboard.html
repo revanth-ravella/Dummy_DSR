@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Nexus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Dashboard Navbar -->
+  <nav class="navbar scrolled">
+    <div class="container">
+      <a href="dashboard.html" class="logo">Nexus</a>
+      <ul class="nav-links">
+        <li><a href="dashboard.html" class="active">Dashboard</a></li>
+        <li><a href="payment.html">Make Payment</a></li>
+        <li><a href="#" id="logoutBtn" class="btn btn-outline nav-cta">Logout</a></li>
+      </ul>
+      <button class="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Dashboard Content -->
+  <section class="dashboard-section">
+    <div class="container">
+
+      <!-- Welcome Banner -->
+      <div class="welcome-banner fade-up">
+        <div class="welcome-content">
+          <span class="section-label">Dashboard</span>
+          <h1>Welcome back, <span class="highlight" id="userName">User</span></h1>
+          <p>Manage your payments, view transaction history, and update your profile.</p>
+        </div>
+        <div class="welcome-actions">
+          <a href="payment.html" class="btn btn-primary">Make Payment &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="dash-stats fade-up">
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon">&#128179;</div>
+          <div>
+            <h3 id="totalPayments">0</h3>
+            <p>Total Payments</p>
+          </div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon">&#10003;</div>
+          <div>
+            <h3 id="confirmedPayments">0</h3>
+            <p>Confirmed</p>
+          </div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon">&#9203;</div>
+          <div>
+            <h3 id="pendingPayments">0</h3>
+            <p>Pending</p>
+          </div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon">&#8377;</div>
+          <div>
+            <h3 id="totalAmount">0</h3>
+            <p>Total Amount</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Grid -->
+      <div class="dash-grid">
+
+        <!-- Quick Actions -->
+        <div class="dash-card fade-up">
+          <div class="dash-card-header">
+            <h2>Quick Actions</h2>
+          </div>
+          <div class="dash-card-body">
+            <div class="quick-actions-grid">
+              <a href="payment.html" class="quick-action">
+                <div class="quick-action-icon">&#128179;</div>
+                <span>Make Payment</span>
+              </a>
+              <a href="#" class="quick-action" onclick="showProfile()">
+                <div class="quick-action-icon">&#128100;</div>
+                <span>My Profile</span>
+              </a>
+              <a href="#paymentHistory" class="quick-action">
+                <div class="quick-action-icon">&#128196;</div>
+                <span>History</span>
+              </a>
+              <a href="contact.html" class="quick-action">
+                <div class="quick-action-icon">&#128172;</div>
+                <span>Support</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="dash-card fade-up" id="profileCard">
+          <div class="dash-card-header">
+            <h2>My Profile</h2>
+          </div>
+          <div class="dash-card-body">
+            <div class="profile-info">
+              <div class="profile-avatar" id="profileAvatar">U</div>
+              <div class="profile-details">
+                <h3 id="profileName">User</h3>
+                <p id="profileEmail">user@email.com</p>
+              </div>
+            </div>
+            <div class="profile-fields">
+              <div class="profile-field">
+                <span class="profile-label">Member Since</span>
+                <span class="profile-value" id="memberSince">-</span>
+              </div>
+              <div class="profile-field">
+                <span class="profile-label">Status</span>
+                <span class="profile-value status-active">Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment History -->
+      <div class="dash-card full-width fade-up" id="paymentHistory">
+        <div class="dash-card-header">
+          <h2>Payment History</h2>
+          <a href="payment.html" class="btn btn-outline" style="padding: 8px 20px; font-size: 0.8rem;">New Payment</a>
+        </div>
+        <div class="dash-card-body">
+          <div class="table-wrapper">
+            <table class="payment-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Name</th>
+                  <th>Purpose</th>
+                  <th>Amount</th>
+                  <th>UTR / Ref</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="paymentTableBody">
+                <tr class="empty-row">
+                  <td colspan="6">
+                    <div class="empty-state">
+                      <div class="empty-icon">&#128179;</div>
+                      <h4>No payments yet</h4>
+                      <p>Your payment history will appear here after you make your first payment.</p>
+                      <a href="payment.html" class="btn btn-primary" style="margin-top: 12px; padding: 10px 24px; font-size: 0.85rem;">Make First Payment &rarr;</a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2026 Nexus. All rights reserved.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Twitter">&#120143;</a>
+          <a href="#" aria-label="GitHub">&#9875;</a>
+          <a href="#" aria-label="LinkedIn">in</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Auth guard - redirect to login if not logged in
+    const user = JSON.parse(sessionStorage.getItem('nexus_user') || 'null');
+    if (!user) {
+      window.location.href = 'login.html';
+    }
+
+    // Populate user info
+    if (user) {
+      const name = user.name || user.email.split('@')[0];
+      document.getElementById('userName').textContent = name;
+      document.getElementById('profileName').textContent = name;
+      document.getElementById('profileEmail').textContent = user.email;
+      document.getElementById('profileAvatar').textContent = name.charAt(0).toUpperCase();
+      document.getElementById('memberSince').textContent = new Date().toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
+    }
+
+    // Load payment history from localStorage
+    function loadPayments() {
+      const payments = JSON.parse(localStorage.getItem('nexus_payments') || '[]');
+      const tbody = document.getElementById('paymentTableBody');
+
+      if (payments.length === 0) return;
+
+      // Update stats
+      const confirmed = payments.filter(p => p.status === 'confirmed').length;
+      const pending = payments.filter(p => p.status === 'pending').length;
+      const totalAmt = payments.reduce((sum, p) => sum + parseFloat(p.amount), 0);
+
+      document.getElementById('totalPayments').textContent = payments.length;
+      document.getElementById('confirmedPayments').textContent = confirmed;
+      document.getElementById('pendingPayments').textContent = pending;
+      document.getElementById('totalAmount').textContent = '\u20B9' + totalAmt.toLocaleString('en-IN');
+
+      // Build table rows
+      tbody.innerHTML = '';
+      payments.reverse().forEach(p => {
+        const statusClass = p.status === 'confirmed' ? 'status-confirmed' : 'status-pending';
+        const statusText = p.status === 'confirmed' ? 'Confirmed' : 'Pending Verification';
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${new Date(p.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+          <td>${p.name}</td>
+          <td>${p.purpose}</td>
+          <td class="amount-cell">\u20B9${parseFloat(p.amount).toLocaleString('en-IN')}</td>
+          <td><code>${p.utr || 'Not provided'}</code></td>
+          <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    loadPayments();
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      sessionStorage.removeItem('nexus_user');
+      window.location.href = 'login.html';
+    });
+
+    function showProfile() {
+      document.getElementById('profileCard').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

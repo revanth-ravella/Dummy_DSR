@@ -7,21 +7,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <!-- QR Code library -->
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar">
+  <!-- Dashboard Navbar -->
+  <nav class="navbar scrolled">
     <div class="container">
-      <a href="index.html" class="logo">Nexus</a>
+      <a href="dashboard.html" class="logo">Nexus</a>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="payment.html" class="btn btn-primary nav-cta active">Pay Now</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="payment.html" class="active">Make Payment</a></li>
+        <li><a href="#" id="logoutBtn" class="btn btn-outline nav-cta">Logout</a></li>
       </ul>
       <button class="hamburger" aria-label="Toggle menu">
         <span></span><span></span><span></span>
@@ -94,7 +91,6 @@
               <input type="text" id="paymentNote" placeholder="e.g. Monthly subscription payment">
             </div>
 
-            <!-- Quick Amount Buttons -->
             <div class="quick-amounts">
               <span class="quick-label">Quick Amount:</span>
               <button type="button" class="quick-amount-btn" data-amount="100">&#8377;100</button>
@@ -112,6 +108,7 @@
 
         <!-- QR Code Display Panel -->
         <div class="qr-panel fade-up" id="qrPanel">
+          <!-- Step 1: Waiting -->
           <div class="qr-waiting" id="qrWaiting">
             <div class="qr-placeholder-icon">&#128244;</div>
             <h3>QR Code will appear here</h3>
@@ -124,6 +121,7 @@
             </div>
           </div>
 
+          <!-- Step 2: QR Generated -->
           <div class="qr-result" id="qrResult" style="display: none;">
             <div class="qr-success-header">
               <span class="section-label" style="background: rgba(0, 206, 201, 0.15); color: var(--accent);">Payment Ready</span>
@@ -162,8 +160,64 @@
             <a href="#" class="open-upi-link" id="openUpiLink">
               &#128241; Open UPI App on this Device
             </a>
-            <button type="button" class="btn btn-outline" onclick="resetPayment()" style="width: 100%; justify-content: center; margin-top: 12px;">
+
+            <!-- Payment Verification Section -->
+            <div class="verify-section">
+              <div class="verify-divider">
+                <span>Payment Done? Confirm Below</span>
+              </div>
+              <div class="verify-form">
+                <div class="form-group">
+                  <label for="utrNumber">UTR / Transaction Reference Number</label>
+                  <input type="text" id="utrNumber" placeholder="Enter 12-digit UTR number from your UPI app" class="utr-input">
+                  <p class="utr-hint">Find this in your PhonePe/GPay transaction details after payment</p>
+                </div>
+                <button type="button" class="btn btn-primary form-submit" id="confirmPaymentBtn" onclick="confirmPayment()">
+                  &#10003; Confirm Payment
+                </button>
+                <button type="button" class="btn btn-outline" onclick="skipVerification()" style="width: 100%; justify-content: center; margin-top: 8px;">
+                  Skip - I'll verify later
+                </button>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-outline" onclick="resetPayment()" style="width: 100%; justify-content: center; margin-top: 16px;">
               &#8634; New Payment
+            </button>
+          </div>
+
+          <!-- Step 3: Payment Confirmed -->
+          <div class="qr-confirmed" id="qrConfirmed" style="display: none;">
+            <div class="confirm-animation">
+              <div class="confirm-circle">
+                <span>&#10003;</span>
+              </div>
+            </div>
+            <h3 class="confirm-title">Payment Recorded!</h3>
+            <p class="confirm-subtitle" id="confirmMessage">Your payment has been recorded and is pending verification.</p>
+            <div class="confirm-details">
+              <div class="qr-detail-row">
+                <span>Amount</span>
+                <span class="qr-detail-value" id="confirmAmount">-</span>
+              </div>
+              <div class="qr-detail-row">
+                <span>UTR / Ref</span>
+                <span class="qr-detail-value" id="confirmUtr">-</span>
+              </div>
+              <div class="qr-detail-row">
+                <span>Status</span>
+                <span class="qr-detail-value" id="confirmStatus">-</span>
+              </div>
+              <div class="qr-detail-row">
+                <span>Date</span>
+                <span class="qr-detail-value" id="confirmDate">-</span>
+              </div>
+            </div>
+            <a href="dashboard.html" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 16px;">
+              &#8592; Go to Dashboard
+            </a>
+            <button type="button" class="btn btn-outline" onclick="resetPayment()" style="width: 100%; justify-content: center; margin-top: 8px;">
+              &#8634; Make Another Payment
             </button>
           </div>
         </div>
@@ -203,33 +257,7 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="logo">Nexus</a>
-          <p>A modern platform for teams who want to build faster and ship with confidence.</p>
-        </div>
-        <div class="footer-col">
-          <h4>Product</h4>
-          <a href="#">Features</a>
-          <a href="#">Pricing</a>
-          <a href="#">Changelog</a>
-          <a href="#">Docs</a>
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <a href="about.html">About</a>
-          <a href="#">Careers</a>
-          <a href="#">Blog</a>
-          <a href="contact.html">Contact</a>
-        </div>
-        <div class="footer-col">
-          <h4>Legal</h4>
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Security</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
         <p>&copy; 2026 Nexus. All rights reserved.</p>
         <div class="footer-socials">
           <a href="#" aria-label="Twitter">&#120143;</a>
@@ -241,18 +269,37 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const supabaseClient = createClient(
+      'https://bbrvjanvocpyhblvqqxm.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJicnZqYW52b2NweWhibHZxcXhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3Mjg0MzUsImV4cCI6MjA4OTMwNDQzNX0.sIyfUfvw89G0LH4I_ZFt6XIoeGJXs9-5fo6Bthv_Bg8'
+    );
+
+    // Make supabase available globally
+    window.supabaseClient = supabaseClient;
+  </script>
   <script>
     const UPI_ID = '8464014792@ptsbi';
     const PAYEE_NAME = 'Nexus';
 
-    // Auto-fill from session if logged in
-    const user = JSON.parse(sessionStorage.getItem('nexus_user') || '{}');
-    if (user.email) {
+    // Auth guard
+    const user = JSON.parse(sessionStorage.getItem('nexus_user') || 'null');
+    if (!user) {
+      window.location.href = 'login.html';
+    }
+
+    // Auto-fill from session
+    if (user) {
       const emailInput = document.getElementById('payerEmail');
-      if (emailInput) emailInput.value = user.email;
+      if (emailInput && user.email) emailInput.value = user.email;
       const nameInput = document.getElementById('payerName');
       if (nameInput && user.name) nameInput.value = user.name;
     }
+
+    // Current payment data (stored temporarily)
+    let currentPayment = null;
 
     // Quick amount buttons
     document.querySelectorAll('.quick-amount-btn').forEach(btn => {
@@ -282,6 +329,7 @@
       const phone = document.getElementById('payerPhone').value.trim();
       const email = document.getElementById('payerEmail').value.trim();
       const purpose = document.getElementById('paymentPurpose').value;
+      const purposeText = document.getElementById('paymentPurpose').options[document.getElementById('paymentPurpose').selectedIndex].text;
       const amount = parseFloat(document.getElementById('paymentAmount').value);
       const note = document.getElementById('paymentNote').value.trim() || purpose;
 
@@ -290,24 +338,22 @@
         return;
       }
 
+      // Store current payment data
+      currentPayment = { name, phone, email, purpose, purposeText, amount, note, date: new Date().toISOString() };
+
       const btn = this.querySelector('.payment-btn');
       btn.disabled = true;
       btn.innerHTML = '&#9881; Generating QR Code...';
 
       setTimeout(() => {
-        // Build UPI URL
         const upiUrl = buildUpiUrl(amount, note);
 
-        // Update display info
         document.getElementById('displayAmount').textContent = '\u20B9' + amount.toLocaleString('en-IN');
         document.getElementById('displayName').textContent = name;
-        document.getElementById('displayPurpose').textContent = document.getElementById('paymentPurpose').options[document.getElementById('paymentPurpose').selectedIndex].text;
+        document.getElementById('displayPurpose').textContent = purposeText;
         document.getElementById('displayNote').textContent = note || '-';
-
-        // Set UPI deep link
         document.getElementById('openUpiLink').href = upiUrl;
 
-        // Generate QR Code
         const qrBox = document.getElementById('qrCodeBox');
         qrBox.innerHTML = '';
         new QRCode(qrBox, {
@@ -319,11 +365,9 @@
           correctLevel: QRCode.CorrectLevel.H
         });
 
-        // Show QR panel, hide waiting
         document.getElementById('qrWaiting').style.display = 'none';
         document.getElementById('qrResult').style.display = 'block';
 
-        // Reset button
         btn.innerHTML = '&#10003; QR Generated!';
         btn.style.background = 'linear-gradient(135deg, #6bcb77, #00cec9)';
 
@@ -333,21 +377,119 @@
           btn.disabled = false;
         }, 2000);
 
-        // Scroll to QR on mobile
         if (window.innerWidth < 768) {
           document.getElementById('qrPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }, 1200);
     });
 
+    // Confirm payment with UTR
+    async function confirmPayment() {
+      const utr = document.getElementById('utrNumber').value.trim();
+      if (!utr) {
+        alert('Please enter your UTR / Transaction Reference Number to confirm payment.');
+        return;
+      }
+
+      const btn = document.getElementById('confirmPaymentBtn');
+      btn.disabled = true;
+      btn.innerHTML = '&#9881; Verifying...';
+
+      // Save payment to localStorage
+      const payment = {
+        ...currentPayment,
+        utr: utr,
+        status: 'confirmed',
+        confirmedAt: new Date().toISOString()
+      };
+
+      savePayment(payment);
+
+      // Try to save to Supabase
+      try {
+        if (window.supabaseClient) {
+          await window.supabaseClient.from('payments').insert([{
+            payer_name: payment.name,
+            payer_phone: payment.phone,
+            payer_email: payment.email,
+            purpose: payment.purpose,
+            amount: payment.amount,
+            note: payment.note,
+            utr: payment.utr,
+            status: 'confirmed'
+          }]);
+        }
+      } catch (err) {
+        console.log('Supabase save skipped:', err.message);
+      }
+
+      // Show confirmation
+      showConfirmation(payment);
+    }
+
+    // Skip verification - save as pending
+    function skipVerification() {
+      const payment = {
+        ...currentPayment,
+        utr: '',
+        status: 'pending',
+      };
+
+      savePayment(payment);
+
+      // Show confirmation with pending status
+      showConfirmation(payment);
+    }
+
+    // Save payment to localStorage
+    function savePayment(payment) {
+      const payments = JSON.parse(localStorage.getItem('nexus_payments') || '[]');
+      payments.push(payment);
+      localStorage.setItem('nexus_payments', JSON.stringify(payments));
+    }
+
+    // Show confirmation screen
+    function showConfirmation(payment) {
+      document.getElementById('qrResult').style.display = 'none';
+      document.getElementById('qrConfirmed').style.display = 'block';
+
+      document.getElementById('confirmAmount').textContent = '\u20B9' + payment.amount.toLocaleString('en-IN');
+      document.getElementById('confirmUtr').textContent = payment.utr || 'Not provided';
+      document.getElementById('confirmDate').textContent = new Date().toLocaleDateString('en-IN', {
+        day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+      });
+
+      if (payment.status === 'confirmed') {
+        document.getElementById('confirmStatus').innerHTML = '<span class="status-badge status-confirmed">Confirmed</span>';
+        document.getElementById('confirmMessage').textContent = 'Your payment has been confirmed with UTR: ' + payment.utr;
+      } else {
+        document.getElementById('confirmStatus').innerHTML = '<span class="status-badge status-pending">Pending Verification</span>';
+        document.getElementById('confirmMessage').textContent = 'Payment recorded as pending. You can add UTR later from the dashboard.';
+      }
+    }
+
     // Reset payment
     function resetPayment() {
       document.getElementById('qrWaiting').style.display = 'block';
       document.getElementById('qrResult').style.display = 'none';
+      document.getElementById('qrConfirmed').style.display = 'none';
       document.getElementById('qrCodeBox').innerHTML = '';
       document.getElementById('paymentForm').reset();
+      document.getElementById('utrNumber').value = '';
       document.querySelectorAll('.quick-amount-btn').forEach(b => b.classList.remove('active'));
+      currentPayment = null;
+
+      const btn = document.getElementById('confirmPaymentBtn');
+      btn.disabled = false;
+      btn.innerHTML = '&#10003; Confirm Payment';
     }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      sessionStorage.removeItem('nexus_user');
+      window.location.href = 'login.html';
+    });
   </script>
 </body>
 </html>
