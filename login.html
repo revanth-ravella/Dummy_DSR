@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Nexus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">Nexus</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html" class="active">Login</a></li>
+        <li><a href="payment.html" class="btn btn-primary nav-cta">Pay Now</a></li>
+      </ul>
+      <button class="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Login Section -->
+  <section class="login-section">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="container">
+      <div class="login-wrapper fade-up">
+        <div class="login-left">
+          <div class="login-brand">
+            <span class="section-label">Welcome Back</span>
+            <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 16px;">Sign in to <span class="highlight">Nexus</span></h1>
+            <p style="color: var(--text-muted); font-size: 1.05rem;">Access your dashboard, manage your account, and make payments securely.</p>
+          </div>
+          <div class="login-features">
+            <div class="login-feature">
+              <div class="login-feature-icon">&#128274;</div>
+              <div>
+                <h4>Secure Login</h4>
+                <p>256-bit encryption keeps your data safe</p>
+              </div>
+            </div>
+            <div class="login-feature">
+              <div class="login-feature-icon">&#9889;</div>
+              <div>
+                <h4>Instant Access</h4>
+                <p>Quick sign-in to your dashboard</p>
+              </div>
+            </div>
+            <div class="login-feature">
+              <div class="login-feature-icon">&#128179;</div>
+              <div>
+                <h4>Easy Payments</h4>
+                <p>UPI payments with QR code support</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="login-right">
+          <div class="login-card">
+            <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; text-align: center;">Sign In</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; margin-bottom: 32px;">Enter your credentials to continue</p>
+
+            <form class="login-form" id="loginForm">
+              <div class="form-group">
+                <label for="loginEmail">Email Address</label>
+                <input type="email" id="loginEmail" placeholder="you@example.com" required>
+              </div>
+              <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <div class="password-wrapper">
+                  <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                  <button type="button" class="toggle-password" onclick="togglePassword()">&#128065;</button>
+                </div>
+              </div>
+              <div class="form-options">
+                <label class="remember-me">
+                  <input type="checkbox" id="rememberMe">
+                  <span>Remember me</span>
+                </label>
+                <a href="#" class="forgot-link">Forgot password?</a>
+              </div>
+              <button type="submit" class="btn btn-primary form-submit">Sign In &rarr;</button>
+            </form>
+
+            <div class="login-divider">
+              <span>or continue with</span>
+            </div>
+
+            <div class="social-login">
+              <button class="social-btn" onclick="socialLogin('google')">
+                <span>G</span> Google
+              </button>
+              <button class="social-btn" onclick="socialLogin('github')">
+                <span>&#9875;</span> GitHub
+              </button>
+            </div>
+
+            <p class="signup-link">Don't have an account? <a href="#">Sign up free &rarr;</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">Nexus</a>
+          <p>A modern platform for teams who want to build faster and ship with confidence.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#">Features</a>
+          <a href="#">Pricing</a>
+          <a href="#">Changelog</a>
+          <a href="#">Docs</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="about.html">About</a>
+          <a href="#">Careers</a>
+          <a href="#">Blog</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Security</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Nexus. All rights reserved.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Twitter">&#120143;</a>
+          <a href="#" aria-label="GitHub">&#9875;</a>
+          <a href="#" aria-label="LinkedIn">in</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Toggle password visibility
+    function togglePassword() {
+      const passInput = document.getElementById('loginPassword');
+      passInput.type = passInput.type === 'password' ? 'text' : 'password';
+    }
+
+    // Login form handler
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('.form-submit');
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      if (!email || !password) return;
+
+      btn.disabled = true;
+      btn.innerHTML = 'Signing in...';
+
+      // Simulate login - redirect to payment page
+      setTimeout(() => {
+        btn.innerHTML = '&#10003; Success!';
+        btn.style.background = 'linear-gradient(135deg, #6bcb77, #00cec9)';
+        // Store login state
+        sessionStorage.setItem('nexus_user', JSON.stringify({ email: email, name: email.split('@')[0] }));
+        setTimeout(() => {
+          window.location.href = 'payment.html';
+        }, 800);
+      }, 1500);
+    });
+
+    // Social login handler
+    function socialLogin(provider) {
+      const user = { email: provider + '@nexus.dev', name: provider.charAt(0).toUpperCase() + provider.slice(1) + ' User' };
+      sessionStorage.setItem('nexus_user', JSON.stringify(user));
+      window.location.href = 'payment.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment - Nexus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- QR Code library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">Nexus</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="payment.html" class="btn btn-primary nav-cta active">Pay Now</a></li>
+      </ul>
+      <button class="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="container">
+      <div class="fade-up">
+        <span class="section-label">Payments</span>
+        <h1 class="section-title">Account <span class="highlight">Details</span></h1>
+        <p class="section-desc">Enter your details and amount to generate a UPI payment QR code. Scan with PhonePe or any UPI app.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Payment Section -->
+  <section class="payment-section">
+    <div class="container">
+      <div class="payment-grid">
+
+        <!-- Account Details Form -->
+        <div class="payment-form-wrapper fade-up">
+          <div class="payment-form-header">
+            <div class="payment-icon-big">&#128179;</div>
+            <h2>Account Details</h2>
+            <p>Fill in your basic details and payment amount</p>
+          </div>
+          <form class="payment-form" id="paymentForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="payerName">Full Name</label>
+                <input type="text" id="payerName" placeholder="John Doe" required>
+              </div>
+              <div class="form-group">
+                <label for="payerPhone">Phone Number</label>
+                <input type="tel" id="payerPhone" placeholder="+91 9876543210" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="payerEmail">Email Address</label>
+              <input type="email" id="payerEmail" placeholder="john@example.com" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="paymentPurpose">Payment Purpose</label>
+                <select id="paymentPurpose" required>
+                  <option value="">Select purpose</option>
+                  <option value="subscription">Subscription</option>
+                  <option value="service">Service Payment</option>
+                  <option value="product">Product Purchase</option>
+                  <option value="consultation">Consultation Fee</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="paymentAmount">Amount (INR)</label>
+                <div class="amount-input-wrapper">
+                  <span class="currency-symbol">&#8377;</span>
+                  <input type="number" id="paymentAmount" placeholder="500" min="1" step="1" required>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="paymentNote">Transaction Note (Optional)</label>
+              <input type="text" id="paymentNote" placeholder="e.g. Monthly subscription payment">
+            </div>
+
+            <!-- Quick Amount Buttons -->
+            <div class="quick-amounts">
+              <span class="quick-label">Quick Amount:</span>
+              <button type="button" class="quick-amount-btn" data-amount="100">&#8377;100</button>
+              <button type="button" class="quick-amount-btn" data-amount="500">&#8377;500</button>
+              <button type="button" class="quick-amount-btn" data-amount="1000">&#8377;1,000</button>
+              <button type="button" class="quick-amount-btn" data-amount="2000">&#8377;2,000</button>
+              <button type="button" class="quick-amount-btn" data-amount="5000">&#8377;5,000</button>
+            </div>
+
+            <button type="submit" class="btn btn-primary form-submit payment-btn">
+              &#128275; Process Payment &rarr;
+            </button>
+          </form>
+        </div>
+
+        <!-- QR Code Display Panel -->
+        <div class="qr-panel fade-up" id="qrPanel">
+          <div class="qr-waiting" id="qrWaiting">
+            <div class="qr-placeholder-icon">&#128244;</div>
+            <h3>QR Code will appear here</h3>
+            <p>Fill in the account details and click "Process Payment" to generate your UPI payment QR code</p>
+            <div class="payment-badges">
+              <div class="payment-badge">&#128241; PhonePe</div>
+              <div class="payment-badge">&#128178; Google Pay</div>
+              <div class="payment-badge">&#128179; Paytm</div>
+              <div class="payment-badge">&#127974; BHIM UPI</div>
+            </div>
+          </div>
+
+          <div class="qr-result" id="qrResult" style="display: none;">
+            <div class="qr-success-header">
+              <span class="section-label" style="background: rgba(0, 206, 201, 0.15); color: var(--accent);">Payment Ready</span>
+              <h3>Scan QR to Pay</h3>
+            </div>
+            <div class="qr-code-container">
+              <div class="qr-code-box" id="qrCodeBox"></div>
+            </div>
+            <div class="qr-amount-display">
+              <span>Amount to Pay</span>
+              <h2 id="displayAmount">&#8377;0</h2>
+            </div>
+            <div class="qr-details">
+              <div class="qr-detail-row">
+                <span>Payee UPI</span>
+                <span class="qr-detail-value">8464014792@ptsbi</span>
+              </div>
+              <div class="qr-detail-row">
+                <span>Payer Name</span>
+                <span class="qr-detail-value" id="displayName">-</span>
+              </div>
+              <div class="qr-detail-row">
+                <span>Purpose</span>
+                <span class="qr-detail-value" id="displayPurpose">-</span>
+              </div>
+              <div class="qr-detail-row">
+                <span>Transaction Note</span>
+                <span class="qr-detail-value" id="displayNote">-</span>
+              </div>
+            </div>
+            <div class="qr-instructions">
+              <p>&#128241; Open <strong>PhonePe</strong>, Google Pay, or any UPI app</p>
+              <p>&#128247; Scan this QR code with your phone camera</p>
+              <p>&#10003; Confirm the payment on your phone</p>
+            </div>
+            <a href="#" class="open-upi-link" id="openUpiLink">
+              &#128241; Open UPI App on this Device
+            </a>
+            <button type="button" class="btn btn-outline" onclick="resetPayment()" style="width: 100%; justify-content: center; margin-top: 12px;">
+              &#8634; New Payment
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Badges -->
+  <section class="trust-section">
+    <div class="container">
+      <div class="trust-grid fade-up">
+        <div class="trust-item">
+          <div class="trust-icon">&#128274;</div>
+          <h4>100% Secure</h4>
+          <p>End-to-end encrypted UPI transactions</p>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">&#9889;</div>
+          <h4>Instant Transfer</h4>
+          <p>Money transferred in seconds via UPI</p>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">&#128241;</div>
+          <h4>All UPI Apps</h4>
+          <p>PhonePe, GPay, Paytm, BHIM & more</p>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">&#128176;</div>
+          <h4>No Extra Charges</h4>
+          <p>Zero transaction fees on UPI payments</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">Nexus</a>
+          <p>A modern platform for teams who want to build faster and ship with confidence.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#">Features</a>
+          <a href="#">Pricing</a>
+          <a href="#">Changelog</a>
+          <a href="#">Docs</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="about.html">About</a>
+          <a href="#">Careers</a>
+          <a href="#">Blog</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Security</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Nexus. All rights reserved.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Twitter">&#120143;</a>
+          <a href="#" aria-label="GitHub">&#9875;</a>
+          <a href="#" aria-label="LinkedIn">in</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    const UPI_ID = '8464014792@ptsbi';
+    const PAYEE_NAME = 'Nexus';
+
+    // Auto-fill from session if logged in
+    const user = JSON.parse(sessionStorage.getItem('nexus_user') || '{}');
+    if (user.email) {
+      const emailInput = document.getElementById('payerEmail');
+      if (emailInput) emailInput.value = user.email;
+      const nameInput = document.getElementById('payerName');
+      if (nameInput && user.name) nameInput.value = user.name;
+    }
+
+    // Quick amount buttons
+    document.querySelectorAll('.quick-amount-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.getElementById('paymentAmount').value = this.dataset.amount;
+        document.querySelectorAll('.quick-amount-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Build UPI intent URL
+    function buildUpiUrl(amount, note) {
+      const params = new URLSearchParams();
+      params.set('pa', UPI_ID);
+      params.set('pn', PAYEE_NAME);
+      params.set('am', amount.toFixed(2));
+      params.set('cu', 'INR');
+      if (note) params.set('tn', note);
+      return 'upi://pay?' + params.toString();
+    }
+
+    // Payment form handler
+    document.getElementById('paymentForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('payerName').value.trim();
+      const phone = document.getElementById('payerPhone').value.trim();
+      const email = document.getElementById('payerEmail').value.trim();
+      const purpose = document.getElementById('paymentPurpose').value;
+      const amount = parseFloat(document.getElementById('paymentAmount').value);
+      const note = document.getElementById('paymentNote').value.trim() || purpose;
+
+      if (!name || !phone || !email || !purpose || !amount || amount <= 0) {
+        alert('Please fill in all required fields with a valid amount.');
+        return;
+      }
+
+      const btn = this.querySelector('.payment-btn');
+      btn.disabled = true;
+      btn.innerHTML = '&#9881; Generating QR Code...';
+
+      setTimeout(() => {
+        // Build UPI URL
+        const upiUrl = buildUpiUrl(amount, note);
+
+        // Update display info
+        document.getElementById('displayAmount').textContent = '\u20B9' + amount.toLocaleString('en-IN');
+        document.getElementById('displayName').textContent = name;
+        document.getElementById('displayPurpose').textContent = document.getElementById('paymentPurpose').options[document.getElementById('paymentPurpose').selectedIndex].text;
+        document.getElementById('displayNote').textContent = note || '-';
+
+        // Set UPI deep link
+        document.getElementById('openUpiLink').href = upiUrl;
+
+        // Generate QR Code
+        const qrBox = document.getElementById('qrCodeBox');
+        qrBox.innerHTML = '';
+        new QRCode(qrBox, {
+          text: upiUrl,
+          width: 250,
+          height: 250,
+          colorDark: '#0a0a1a',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+
+        // Show QR panel, hide waiting
+        document.getElementById('qrWaiting').style.display = 'none';
+        document.getElementById('qrResult').style.display = 'block';
+
+        // Reset button
+        btn.innerHTML = '&#10003; QR Generated!';
+        btn.style.background = 'linear-gradient(135deg, #6bcb77, #00cec9)';
+
+        setTimeout(() => {
+          btn.innerHTML = '&#128275; Process Payment &rarr;';
+          btn.style.background = '';
+          btn.disabled = false;
+        }, 2000);
+
+        // Scroll to QR on mobile
+        if (window.innerWidth < 768) {
+          document.getElementById('qrPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 1200);
+    });
+
+    // Reset payment
+    function resetPayment() {
+      document.getElementById('qrWaiting').style.display = 'block';
+      document.getElementById('qrResult').style.display = 'none';
+      document.getElementById('qrCodeBox').innerHTML = '';
+      document.getElementById('paymentForm').reset();
+      document.querySelectorAll('.quick-amount-btn').forEach(b => b.classList.remove('active'));
+    }
+  </script>
+</body>
+</html>
